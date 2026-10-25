@@ -64,6 +64,12 @@ public class BookingController {
         return toResponse(booking);
     }
 
+    //Delete Booking
+    @DeleteMapping("/{id}")
+    public void deleteBooking(@PathVariable Long id){
+        bookingService.deleteBookingById(id);
+    }
+
 
     private BookingResponse toResponse(Booking booking) {
     return new BookingResponse(
