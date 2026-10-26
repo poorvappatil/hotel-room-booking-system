@@ -1,0 +1,96 @@
+/* ==========================================================================
+   LUMIÈRE HOTEL & RESIDENCES - RESPONSIVE STYLES
+   ========================================================================== */
+
+@media (max-width: 1024px) {
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-xl);
+  }
+}
+
+@media (max-width: 768px) {
+  .nav-toggle-btn {
+    display: block;
+  }
+
+  .nav-links {
+    position: fixed;
+    top: 80px;
+    left: 0;
+    width: 100%;
+    background-color: var(--color-primary);
+    flex-direction: column;
+    padding: var(--space-xl) var(--space-lg);
+    gap: var(--space-lg);
+    border-bottom: 2px solid var(--color-accent);
+    transform: translateY(-150%);
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+    box-shadow: var(--shadow-xl);
+  }
+
+  .nav-links.open {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .nav-actions .btn {
+    display: none;
+  }
+
+  .hero {
+    padding: 5rem 0 7rem 0;
+  }
+
+  .search-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .floating-search-bar {
+    margin-top: -2.5rem;
+    padding: 1.25rem;
+  }
+
+  .rooms-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .room-detail-layout {
+    grid-template-columns: 1fr !important;
+  }
+
+  .booking-layout {
+    grid-template-columns: 1fr !important;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-xl);
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    gap: var(--space-sm);
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding-left: var(--space-md);
+    padding-right: var(--space-md);
+  }
+
+  .hero-title {
+    font-size: 2rem;
+  }
+
+  .toast {
+    min-width: calc(100vw - 32px);
+    right: 16px;
+    bottom: 16px;
+  }
+}

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Staff Portal - Room Management | Lumière Hotel</title>
+  <meta name="description" content="Administrative interface for managing hotel room inventory, rates, and active availability.">
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <style>
+    .security-notice-banner {
+      background-color: var(--color-warning-bg);
+      border: 1.5px solid rgba(180, 83, 9, 0.4);
+      color: var(--color-warning);
+      padding: 1.25rem 1.5rem;
+      border-radius: var(--radius-md);
+      margin-bottom: var(--space-2xl);
+      font-size: 0.925rem;
+      line-height: 1.6;
+    }
+    .data-table-card {
+      background-color: #ffffff;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--color-border);
+      overflow-x: auto;
+    }
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.95rem;
+    }
+    .data-table th {
+      background-color: var(--color-bg-alt);
+      padding: 1rem 1.25rem;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--color-text-muted);
+      border-bottom: 1px solid var(--color-border);
+    }
+    .data-table td {
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid var(--color-border-light);
+      vertical-align: middle;
+    }
+    .data-table tr:hover td {
+      background-color: #fafbfd;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="index.html" class="brand-logo" id="navLogo">
+        <span class="brand-icon">✦</span>
+        <span>LUMIÈRE <span>STAFF</span></span>
+      </a>
+      
+      <nav class="nav-links" id="navMenu">
+        <a href="index.html" class="nav-link">Customer Website</a>
+        <a href="rooms.html" class="nav-link">Rooms Catalog</a>
+        <a href="confirmation.html" class="nav-link">Reservation Lookup</a>
+        <a href="manage-rooms.html" class="nav-link active text-gold">Staff Room Manager</a>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="index.html" class="btn btn-outline btn-sm">Return to Site</a>
+        <button class="nav-toggle-btn" aria-label="Toggle navigation" id="navToggleBtn">&#9776;</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="section">
+    <div class="container">
+      <!-- Security Warning Notice (as requested by user) -->
+      <div class="security-notice-banner">
+        <strong>⚠️ Security & Authentication Notice:</strong>
+        This staff management interface interacts directly with the existing Spring Boot REST endpoints (<code>/api/rooms</code>). 
+        The current backend does not feature an authentication or authorization layer (no login or role checks). 
+        Therefore, this page is intended for administrative testing and local demonstration, and 
+        <strong>must not be considered secure for production use</strong> without implementing authentication (such as Spring Security with JWT or session authentication).
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-xl); flex-wrap: wrap; gap: var(--space-md);">
+        <div>
+          <h1 style="font-size: 2rem;">Hotel Room Inventory</h1>
+          <p>Create, update, or decommission hotel room listings directly in the H2 database.</p>
+        </div>
+        <div>
+          <button id="openAddRoomModalBtn" class="btn btn-primary">
+            + Add New Room
+          </button>
+        </div>
+      </div>
+
+      <!-- Inventory Table -->
+      <div class="data-table-card">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Room #</th>
+              <th>Suite Type</th>
+              <th>Capacity</th>
+              <th>Nightly Rate (₹)</th>
+              <th>Status</th>
+              <th style="text-align: right;">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="roomsTableBody">
+            <tr>
+              <td colspan="7" class="text-center" style="padding: 2rem;">Loading room inventory...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <!-- Add / Edit Room Modal -->
+  <div class="modal-backdrop" id="roomModal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title" id="roomModalTitle">Add New Room</h3>
+        <button class="modal-close-btn" id="closeRoomModalBtn">&times;</button>
+      </div>
+      <form id="roomForm">
+        <div class="modal-body">
+          <input type="hidden" id="editRoomId">
+
+          <div class="form-group" style="margin-bottom: var(--space-md);">
+            <label for="roomNumberInput" class="form-label">Room Number *</label>
+            <input type="text" id="roomNumberInput" class="form-control" placeholder="e.g. 101, 204B" required>
+            <div class="form-feedback" id="roomNumFeedback"></div>
+          </div>
+
+          <div class="form-group" style="margin-bottom: var(--space-md);">
+            <label for="roomTypeInput" class="form-label">Suite Type *</label>
+            <input type="text" id="roomTypeInput" class="form-control" placeholder="e.g. Deluxe Suite, Executive King" required>
+            <div class="form-feedback" id="roomTypeFeedback"></div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-md); margin-bottom: var(--space-md);">
+            <div class="form-group">
+              <label for="capacityInput" class="form-label">Capacity (Guests) *</label>
+              <input type="number" id="capacityInput" class="form-control" min="1" max="20" value="2" required>
+              <div class="form-feedback" id="capacityFeedback"></div>
+            </div>
+
+            <div class="form-group">
+              <label for="priceInput" class="form-label">Price Per Night (₹) *</label>
+              <input type="number" id="priceInput" class="form-control" step="1" min="1" placeholder="3500" required>
+              <div class="form-feedback" id="priceFeedback"></div>
+            </div>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 0.5rem; margin-top: var(--space-md);">
+            <input type="checkbox" id="activeCheckbox" checked style="width: 18px; height: 18px;">
+            <label for="activeCheckbox" style="font-size: 0.925rem; font-weight: 500; cursor: pointer;">
+              Active (Visible and available for customer reservations)
+            </label>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" id="cancelRoomModalBtn">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="saveRoomBtn">Save Room</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Delete Confirmation Modal -->
+  <div class="modal-backdrop" id="deleteModal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">Delete Room</h3>
+        <button class="modal-close-btn" id="closeDeleteModalBtn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to delete <strong id="deleteRoomInfo">Room</strong>?</p>
+        <p style="font-size: 0.875rem; color: var(--color-danger); margin-top: 0.5rem;">
+          Warning: This action will permanently remove the room record from the database.
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" id="cancelDeleteBtn">Cancel</button>
+        <button class="btn btn-danger" id="confirmDeleteBtn">Delete Room</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom" style="border: none; padding: 0;">
+        <div>&copy; <span class="current-year">2026</span> Lumière Hotel & Residences. Staff Management.</div>
+        <div style="color: var(--color-text-light);">Non-authenticated administration interface</div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/manage-rooms.js"></script>
+</body>
+</html>
