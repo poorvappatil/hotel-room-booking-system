@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Suite Details | Lumière Hotel & Residences</title>
+  <meta name="description" content="View detailed specifications, luxury amenities, and reserve your stay at Lumière Hotel.">
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <style>
+    .room-detail-layout {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: var(--space-2xl);
+      align-items: flex-start;
+    }
+    .detail-hero-img-wrap {
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+      height: 440px;
+      margin-bottom: var(--space-xl);
+      background-color: #0b1325;
+    }
+    .detail-hero-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .specs-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-md);
+      margin: var(--space-lg) 0;
+      padding: var(--space-md) 0;
+      border-top: 1px solid var(--color-border);
+      border-bottom: 1px solid var(--color-border);
+    }
+    .spec-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+      font-size: 0.95rem;
+      color: var(--color-text-main);
+      font-weight: 500;
+    }
+    .spec-item .spec-icon {
+      color: var(--color-accent);
+      font-size: 1.25rem;
+    }
+    .amenities-list-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: var(--space-md);
+      margin-top: var(--space-md);
+    }
+    .amenity-bullet {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.925rem;
+      color: var(--color-text-main);
+    }
+    .amenity-bullet span {
+      color: var(--color-accent);
+      font-weight: 700;
+    }
+    .booking-sidebar-card {
+      background-color: #ffffff;
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      box-shadow: var(--shadow-xl);
+      border: 1px solid var(--color-border);
+      position: sticky;
+      top: 100px;
+    }
+    .price-callout {
+      margin-bottom: var(--space-lg);
+      padding-bottom: var(--space-md);
+      border-bottom: 1px solid var(--color-border-light);
+    }
+    .price-callout .amount {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--color-primary);
+      font-family: var(--font-serif);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="index.html" class="brand-logo" id="navLogo">
+        <span class="brand-icon">✦</span>
+        <span>LUMIÈRE <span>HOTEL</span></span>
+      </a>
+      
+      <nav class="nav-links" id="navMenu">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="rooms.html" class="nav-link active">Rooms & Suites</a>
+        <a href="confirmation.html" class="nav-link">My Reservation</a>
+        <a href="manage-rooms.html" class="nav-link text-gold">Staff Portal</a>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="rooms.html" class="btn btn-outline btn-sm">All Accommodations</a>
+        <button class="nav-toggle-btn" aria-label="Toggle navigation" id="navToggleBtn">&#9776;</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="section">
+    <div class="container">
+      <!-- Breadcrumb -->
+      <nav style="margin-bottom: var(--space-lg); font-size: 0.875rem; color: var(--color-text-light);">
+        <a href="index.html" style="color: var(--color-accent);">Home</a> / 
+        <a href="rooms.html" style="color: var(--color-accent);">Rooms</a> / 
+        <span id="breadcrumbRoomTitle" style="color: var(--color-text-main);">Suite Details</span>
+      </nav>
+
+      <div id="roomDetailContainer">
+        <!-- Loading Skeleton -->
+        <div class="skeleton" style="height: 400px; margin-bottom: var(--space-xl);"></div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="brand-logo">
+            <span class="brand-icon">✦</span>
+            <span>LUMIÈRE <span>HOTEL</span></span>
+          </a>
+          <p>Unmatched architectural grandeur, refined privacy, and attentive concierge service.</p>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Navigation</h4>
+          <ul class="footer-links">
+            <li><a href="index.html" class="footer-link">Home</a></li>
+            <li><a href="rooms.html" class="footer-link">Rooms & Suites</a></li>
+            <li><a href="confirmation.html" class="footer-link">Reservation Lookup</a></li>
+            <li><a href="manage-rooms.html" class="footer-link">Staff Room Management</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Direct Inquiries</h4>
+          <ul class="footer-links">
+            <li><span class="footer-link">📞 +1 (800) 555-0199</span></li>
+            <li><span class="footer-link">✉️ reservations@lumierehotel.com</span></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Check-In Policy</h4>
+          <ul class="footer-links">
+            <li><span class="footer-link">Standard Check-In: 3:00 PM</span></li>
+            <li><span class="footer-link">Standard Check-Out: 11:00 AM</span></li>
+            <li><span class="footer-link">Government Photo ID Required</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>&copy; <span class="current-year">2026</span> Lumière Hotel & Residences. All rights reserved.</div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/room-details.js"></script>
+</body>
+</html>

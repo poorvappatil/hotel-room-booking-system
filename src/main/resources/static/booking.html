@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reserve Your Stay | Lumière Hotel & Residences</title>
+  <meta name="description" content="Secure your room reservation at Lumière Hotel & Residences with instantaneous confirmation.">
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <style>
+    .booking-layout {
+      display: grid;
+      grid-template-columns: 1.6fr 1.2fr;
+      gap: var(--space-2xl);
+      align-items: flex-start;
+    }
+    .booking-card {
+      background-color: #ffffff;
+      border-radius: var(--radius-lg);
+      padding: 2.25rem;
+      box-shadow: var(--shadow-xl);
+      border: 1px solid var(--color-border);
+    }
+    .room-preview-box {
+      background-color: #ffffff;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--color-border);
+      overflow: hidden;
+      position: sticky;
+      top: 100px;
+    }
+    .room-preview-img {
+      height: 200px;
+      width: 100%;
+      object-fit: cover;
+      background-color: #0b1325;
+    }
+    .room-preview-body {
+      padding: 1.75rem;
+    }
+    .cost-summary-table {
+      width: 100%;
+      margin: var(--space-md) 0;
+      border-collapse: collapse;
+    }
+    .cost-summary-table td {
+      padding: 0.6rem 0;
+      font-size: 0.95rem;
+    }
+    .cost-summary-table tr:not(:last-child) {
+      border-bottom: 1px solid var(--color-border-light);
+    }
+    .cost-total-row td {
+      border-top: 2px solid var(--color-border) !important;
+      font-weight: 700;
+      font-size: 1.2rem !important;
+      color: var(--color-primary);
+      padding-top: 0.9rem !important;
+    }
+    .alert-banner {
+      padding: 1rem 1.25rem;
+      border-radius: var(--radius-md);
+      margin-bottom: var(--space-lg);
+      font-size: 0.925rem;
+      display: none;
+    }
+    .alert-banner.alert-error {
+      display: block;
+      background-color: var(--color-danger-bg);
+      color: var(--color-danger);
+      border: 1px solid rgba(185, 28, 28, 0.3);
+    }
+    .alert-banner.alert-warning {
+      display: block;
+      background-color: var(--color-warning-bg);
+      color: var(--color-warning);
+      border: 1px solid rgba(180, 83, 9, 0.3);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="index.html" class="brand-logo" id="navLogo">
+        <span class="brand-icon">✦</span>
+        <span>LUMIÈRE <span>HOTEL</span></span>
+      </a>
+      
+      <nav class="nav-links" id="navMenu">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="rooms.html" class="nav-link">Rooms & Suites</a>
+        <a href="confirmation.html" class="nav-link">My Reservation</a>
+        <a href="manage-rooms.html" class="nav-link text-gold">Staff Portal</a>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="rooms.html" class="btn btn-outline btn-sm">Change Suite</a>
+        <button class="nav-toggle-btn" aria-label="Toggle navigation" id="navToggleBtn">&#9776;</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="section">
+    <div class="container">
+      <!-- Breadcrumb -->
+      <nav style="margin-bottom: var(--space-lg); font-size: 0.875rem; color: var(--color-text-light);">
+        <a href="index.html" style="color: var(--color-accent);">Home</a> / 
+        <a href="rooms.html" style="color: var(--color-accent);">Rooms</a> / 
+        <span style="color: var(--color-text-main);">Reservation Checkout</span>
+      </nav>
+
+      <div class="section-title-wrap" style="text-align: left; margin-bottom: var(--space-xl);">
+        <span class="section-subtitle">Instant Reservation</span>
+        <h1 class="section-title">Complete Your Booking</h1>
+        <p class="section-desc">Please provide guest details and confirm your intended stay dates below.</p>
+      </div>
+
+      <div class="booking-layout">
+        <!-- Left: Booking Form -->
+        <div class="booking-card">
+          <!-- Error alert banner -->
+          <div id="bookingAlert" class="alert-banner" role="alert"></div>
+
+          <form id="bookingForm" novalidate>
+            <!-- Suite Selector (if not preselected) -->
+            <div class="form-group" style="margin-bottom: var(--space-lg);" id="roomSelectGroup">
+              <label for="roomSelect" class="form-label">Selected Accommodation *</label>
+              <select id="roomSelect" class="form-control" required>
+                <option value="">-- Choose an Available Suite --</option>
+              </select>
+              <div class="form-feedback" id="roomFeedback"></div>
+            </div>
+
+            <!-- Guest Name -->
+            <div class="form-group" style="margin-bottom: var(--space-lg);">
+              <label for="guestName" class="form-label">Primary Guest Full Name *</label>
+              <input type="text" id="guestName" class="form-control" placeholder="e.g. Eleanor Vance" required autocomplete="name">
+              <div class="form-feedback" id="nameFeedback"></div>
+            </div>
+
+            <!-- Dates Row -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-md); margin-bottom: var(--space-lg);">
+              <div class="form-group">
+                <label for="checkInDate" class="form-label">Check-In Date *</label>
+                <input type="date" id="checkInDate" class="form-control" required>
+                <div class="form-feedback" id="checkInFeedback"></div>
+              </div>
+
+              <div class="form-group">
+                <label for="checkOutDate" class="form-label">Check-Out Date *</label>
+                <input type="date" id="checkOutDate" class="form-control" required>
+                <div class="form-feedback" id="checkOutFeedback"></div>
+              </div>
+            </div>
+
+            <!-- Guarantees & Terms Notice -->
+            <div style="background-color: var(--color-bg-alt); padding: 1rem 1.25rem; border-radius: var(--radius-sm); margin-bottom: var(--space-xl); font-size: 0.85rem; color: var(--color-text-muted);">
+              <strong>Booking Terms:</strong> No deposit is required today. Payment is collected at the front desk upon arrival. Free cancellation is permitted up to 24 hours prior to check-in.
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" id="submitBookingBtn" class="btn btn-primary btn-block btn-lg">
+              <span id="btnText">Confirm & Book Reservation ➔</span>
+              <span id="btnSpinner" style="display: none;">Reserving Suite...</span>
+            </button>
+          </form>
+        </div>
+
+        <!-- Right: Reservation Summary Preview -->
+        <aside>
+          <div class="room-preview-box" id="roomPreviewBox">
+            <img id="previewImg" src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1200&q=80" alt="Suite Preview" class="room-preview-img">
+            
+            <div class="room-preview-body">
+              <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.5rem;">
+                <span class="badge badge-gold" id="previewRoomBadge">Select a Room</span>
+                <span style="font-size: 0.85rem; color: var(--color-text-muted);" id="previewCapacity">👥 Up to -- Guests</span>
+              </div>
+
+              <h3 id="previewTitle" style="font-size: 1.4rem; margin-bottom: var(--space-xs);">Suite Preview</h3>
+              <p id="previewRoomNumber" style="font-size: 0.9rem; margin-bottom: var(--space-md);">Room: --</p>
+
+              <table class="cost-summary-table">
+                <tbody>
+                  <tr>
+                    <td>Nightly Rate</td>
+                    <td class="text-right" id="previewRate">₹0</td>
+                  </tr>
+                  <tr>
+                    <td>Stay Duration</td>
+                    <td class="text-right" id="previewDuration">0 Nights</td>
+                  </tr>
+                  <tr>
+                    <td>Taxes & Resort Fees</td>
+                    <td class="text-right" style="color: var(--color-success);">Included</td>
+                  </tr>
+                  <tr class="cost-total-row">
+                    <td>Estimated Total</td>
+                    <td class="text-right text-gold" id="previewTotal">₹0</td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <div style="font-size: 0.8rem; color: var(--color-text-light); text-align: center; margin-top: 1rem;">
+                ✦ Confirmed with live backend availability check
+              </div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="brand-logo">
+            <span class="brand-icon">✦</span>
+            <span>LUMIÈRE <span>HOTEL</span></span>
+          </a>
+          <p>Exemplary architecture, understated luxury, and personalized hospitality at every turn.</p>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Navigation</h4>
+          <ul class="footer-links">
+            <li><a href="index.html" class="footer-link">Home</a></li>
+            <li><a href="rooms.html" class="footer-link">Rooms & Suites</a></li>
+            <li><a href="confirmation.html" class="footer-link">Reservation Lookup</a></li>
+            <li><a href="manage-rooms.html" class="footer-link">Staff Room Management</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Check-In Policies</h4>
+          <ul class="footer-links">
+            <li><span class="footer-link">Check-In: 3:00 PM</span></li>
+            <li><span class="footer-link">Check-Out: 11:00 AM</span></li>
+            <li><span class="footer-link">Age Requirement: 21+</span></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Concierge</h4>
+          <ul class="footer-links">
+            <li><span class="footer-link">📞 +1 (800) 555-0199</span></li>
+            <li><span class="footer-link">✉️ concierge@lumierehotel.com</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>&copy; <span class="current-year">2026</span> Lumière Hotel & Residences. All rights reserved.</div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/booking.js"></script>
+</body>
+</html>
